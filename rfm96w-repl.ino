@@ -60,7 +60,12 @@ void loop() {
     if (radio.recv(rxBuffer, &rxLength)) {
       Serial.println("REPLY");
       Serial.println((char)rxLength);
-      Serial.println((char*)rxBuffer);
+
+      // rxBuffer doesn't have a null-terminator so manually outputing array
+      for (uint8_t i = 0; i < rxLength; i++)
+        Serial.print((char)rxBuffer[i]);
+
+      Serial.print("\r\n");
     } else {
       Serial.println("REPLY_FAIL");
     }
