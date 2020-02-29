@@ -25,14 +25,14 @@ void setup() {
 
   if (!radio.init()) {
     Serial.println("INIT_FAIL");
-    while(1);
+    while(true);
   } else {
     Serial.println("INIT_OK");
   }
 
   if (!radio.setFrequency(RFM_FREQ)) {
     Serial.println("FREQ_FAIL");
-    while(1);
+    while(true);
   } else {
     Serial.println("FREQ_OK");
   }  
@@ -59,7 +59,10 @@ void loop() {
   if (radio.waitAvailableTimeout(5000)) {
     if (radio.recv(rxBuffer, &rxLength)) {
       Serial.println("REPLY");
-      Serial.println((char*)rxBuffer);
+      
+      for (uint_8 i = 0; i < rxLength; i++)
+        Serial.print(rxBuffer[i], HEX);
+      Serial.print("\r\n");
     } else {
       Serial.println("REPLY_FAIL");
     }
