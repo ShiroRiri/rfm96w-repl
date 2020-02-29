@@ -41,21 +41,23 @@ void setup() {
 void loop() {
   Serial.println("READY");
 
+  /* --- Transmit --- */
   String txString;
-  char* txBuffer;
-  while (txString.length() == 0) {
-    txString = Serial.readString();
-  }
+  while ((txString = Serial.readString()).length() == 0); // Wait for data to send
 
-  txBuffer = new char[txString.length() + 1];
-  strcpy(txBuffer, txString.c_str());
+  uint8_t txLength = txString.length();
+  byte* txBuffer = new byte[txLength];
+  memcpy(txBuffer, txString.c_str(), txLength);
+  
+  radio.send(txBuffer, txLength);
   radio.waitPacketSent();
 
-  unsigned char rxBuffer[RH_RF95_MAX_MESSAGE_LEN];
-  uint8_t len = sizeof(rxBuffer);
+  /* --- Receive --- */
+  uint8_t rxLength = RH_RF95_MAX_MESSAGE_LEN;
+  byte rxBuffer[rxLength];
 
   if (radio.waitAvailableTimeout(5000)) {
-    if (radio.recv(rxBuffer, &len)) {
+    if (radio.recv(rxBuffer, &rxLength)) {
       Serial.println("REPLY");
       Serial.println((char*)rxBuffer);
     } else {
