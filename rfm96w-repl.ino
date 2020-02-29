@@ -59,10 +59,8 @@ void loop() {
   if (radio.waitAvailableTimeout(5000)) {
     if (radio.recv(rxBuffer, &rxLength)) {
       Serial.println("REPLY");
-      
-      for (uint8_t i = 0; i < rxLength; i++)
-        Serial.print(rxBuffer[i], HEX);
-      Serial.print("\r\n");
+      Serial.println((char)rxLength);
+      Serial.println((char*)rxBuffer);
     } else {
       Serial.println("REPLY_FAIL");
     }
