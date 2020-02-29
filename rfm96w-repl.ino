@@ -60,7 +60,7 @@ void loop() {
     if (radio.recv(rxBuffer, &rxLength)) {
       Serial.println("REPLY");
       
-      for (uint_8 i = 0; i < rxLength; i++)
+      for (uint8_t i = 0; i < rxLength; i++)
         Serial.print(rxBuffer[i], HEX);
       Serial.print("\r\n");
     } else {
