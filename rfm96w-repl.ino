@@ -44,13 +44,17 @@ void loop() {
   /* --- Transmit --- */
   String txString;
   while ((txString = Serial.readString()).length() == 0); // Wait for data to send
+  Serial.println("SENDING");
 
-  uint8_t txLength = txString.length();
+  uint8_t txLength = txString.length() - 1;
   byte* txBuffer = new byte[txLength];
   memcpy(txBuffer, txString.c_str(), txLength);
   
   radio.send(txBuffer, txLength);
   radio.waitPacketSent();
+  Serial.println("SENT");
+
+  delete txBuffer;
 
   /* --- Receive --- */
   uint8_t rxLength = RH_RF95_MAX_MESSAGE_LEN;
